@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  authorization_server_db:
+    image: postgres
+    environment:
+      - DOCKER=True
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Iamgenius
+      - POSTGRES_DB=service
+    ports:
+      - "5432:5432"
+    networks:
+      - net
+    volumes:
+      - ./dockerfiles/pgdata:/var/lib/postgresql/data_docker/pgdata_docker
+  authorization_server:
+    build: stranger_friends_authorization_server/
+    image: authorization_server
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/stranger_friends_authorization_server
+    ports:
+      - "8000:8000"
+    depends_on:
+      - authorization_server_db
+      - authorization_server_migration
+    networks:
+     - net
+  authorization_server_migration:
+    image: authorization_server
+    command: ["bash", "-c", "sleep 5; python manage.py migrate --noinput"]
+    volumes:
+      - .:/stranger_friends_authorization_server
+    depends_on:
+      - authorization_server_db
+    networks:
+      - net
+  data_controll_server:
+    build: stranger_friends_data_controll/
+    image: data_controll_server
+    command: python3 data_controll.py
+    volumes:
+      - .:/stranger_friends_data_controll
+    ports:
+      - "9000:9000"
+    depends_on:
+      - data_controll_server_db
+    networks:
+      - net
+  data_controll_server_db:
+    image: mongo
+    ports:
+      - "28017:28017"
+      - "27017:27017"
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge

@@ -1,0 +1,14 @@
+[global]
+SECRET_KEY: ***
+DEBUG: True
+
+DOMAIN: stranger_friends_authorization_server
+
+[database_primary]
+
+DATABASE_ENGINE: django.db.backends.postgresql_psycopg2
+DATABASE_NAME: service
+DATABASE_USER: postgres
+DATABASE_PASSWORD: Iamgenius
+DATABASE_HOST: authorization_server_db
+DATABASE_PORT: 5432

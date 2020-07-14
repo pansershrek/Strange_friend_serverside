@@ -1,0 +1,11 @@
+port=9000
+dev_mode=False
+instances=1
+
+authorization_server_validate_user_url='http://localhost:8000/authorization/validate_user'
+authorization_server_post_data_url='http://localhost:8000/authorization/post_data'
+
+db_port=27017
+db_host='localhost'
+db_name='database'
+db_collection='collection'
